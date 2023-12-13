@@ -1,45 +1,102 @@
 <template>
-	<div class="container mb-3">
-		<form action="">
-			<div class="mb-3">
-				<label for="" class="form-label">
-					Page Title
-				</label>
-				<input 
-					type="text"
-					class="form-control"
-					v-model="pageTitle"
-				/>
+	<form action="" class="container mb-3">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="mb-3">
+					<label for="" class="form-label">
+						Page Title
+					</label>
+					<input 
+						type="text"
+						class="form-control"
+						v-model="pageTitle"
+					/>
+				</div>
+				<div class="mb-3">
+					<label for="" class="form-label">
+						Content
+					</label>
+					<textarea 
+						type="text"
+						class="form-control"
+						v-model="content"
+						rows="5"
+					></textarea>
+				</div>
 			</div>
-			<div class="mb-3">
-				<label for="" class="form-label">
-					Content
-				</label>
-				<textarea 
-					type="text"
-					class="form-control"
-					v-model="content"
-					rows="5"
-				></textarea>
-			</div>
-			<div class="mb-3">
-				<button
-					class="btn btn-primary"
-					@click.prevent="pageCreated({pageTitle,content})"
-				>Create Page</button>
-			</div>
-		</form>
-	</div>
+			<div class="col">
+				<div class="mb-3">
+					<label for="" class="form-label">
+						Link Text
+					</label>
+					<input 
+						type="text"
+						class="form-control"
+						v-model="linkText"
+					/>
+				</div>
+				<div class="mb-3">
+					<label for="" class="form-label">
+						Link Url
+					</label>
+					<input 
+						type="text"
+						class="form-control"
+						v-model="linkUrl"
+					/>
+				</div>
+				<div class="row mb-3">
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input">
+						<label for="gridCheck1" class="form-check-label">
+						Published
+						</label>
+					</div>
+				</div>
+				
+			</div>	
+		</div>	
+		<div class="mb-3">
+			<button
+				class="btn btn-primary"
+				:disabled="isFormInvalid"
+				@click.prevent="submitForm"
+			>Create Page</button>
+		</div>
+	</form>
 </template>
 
 <script>
 export default{
 	props:['pageCreated'],
+	computed :{
+		isFormInvalid(){
+			return !this.pageTitle || !this.content || !this.linkText || !this.linkUrl
+		}
+	},
 	data(){
 		return{
 			pageTitle:'',
-			content:''
+			content:'',
+			linkText:'',
+			linkUrl:''
 
+		}
+	},
+	methods:{
+		submitForm(){
+			if(!this.pageTitle || !this.content || !this.linkText || !this.linkUrl){
+				alert('Please fill the form');
+			}
+
+			this.pageCreated({
+				pageTitle : this.pageTitle,
+				content : this.content,
+				link :{
+						text : this.linkText,
+						url : this.linkUrl 	
+				} 
+			})
 		}
 	}
 }
